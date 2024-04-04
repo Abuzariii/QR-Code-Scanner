@@ -11,12 +11,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col h-screen justify-center items-center">
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-column justify-center items-center">
+          <h1 className="text-4xl mb-8">Hanadi's QR Scanner</h1>
           <Link
             href={`/scan`}
             className=" bg-red-200 m-4 text-4xl rounded-md px-4 py-2 hover:bg-blue-400"
           >
-            QR Scan
+            Scan QR
           </Link>
           {/* <Link
             href={`/generate`}

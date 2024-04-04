@@ -8,14 +8,36 @@ import axios from "axios";
 export default function Scan() {
   const router = useRouter();
   const [data, setData] = useState("No result");
+  const [message, setMessage] = useState("Checking...");
   const [showModal, setShowModal] = useState(false);
   const qrRef = useRef(null);
 
-  const handleScan = (result, error) => {
+  const handleScan = async (result, error) => {
     if (!!result) {
       setData(result?.text);
       setShowModal(true);
-      qrRef.current.stop();
+      // qrRef.current.stop();
+
+      const scannedUrl = result?.text;
+      const url = `https://malicious-urls.p.rapidapi.com/check?url=${scannedUrl}`;
+      const options = {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key":
+            "4642effa23msh96f41098f5e9d02p10d222jsn007841d345d5",
+          "X-RapidAPI-Host": "malicious-urls.p.rapidapi.com",
+        },
+      };
+
+      try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        console.log(result);
+        console.log(result.malicious);
+        setMessage(result.malicious === true ? "Malicious" : "Benign");
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     if (!!error) {
@@ -25,11 +47,6 @@ export default function Scan() {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    router.reload();
-  };
-
-  const handleOK = async () => {
-    await axios.post(`/api/postData`, { data });
     router.reload();
   };
 
@@ -63,11 +80,11 @@ export default function Scan() {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
               <div className="bg-white rounded-md p-4">
                 <p className="text-xl font-bold mb-2">
-                  Scanned data by Abuzar:
+                  Scanned data by Hanadi :
                 </p>
                 <p>{data}</p>
                 <p className="text-xl font-bold mb-2">
-                  Scanned URL Type : Benign
+                  Scanned URL Type : {message}
                 </p>
                 <button
                   className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-4 hover:bg-gray-300"
