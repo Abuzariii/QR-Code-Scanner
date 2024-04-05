@@ -85,8 +85,19 @@ export default function Scan() {
               <div className="bg-white rounded-md p-4">
                 <p className="text-xl font-bold mb-2">Scanned data :</p>
                 <p>{data}</p>
-                <p className="text-xl font-bold mb-2">
+                {/* <p className="text-xl font-bold mb-2">
                   Scanned URL Type : {message}
+                </p> */}
+                <p
+                  className={`text-xl font-bold mb-2 ${
+                    message.toLowerCase() === "benign"
+                      ? "text-green-500"
+                      : message.toLowerCase() === "malicious"
+                      ? "text-red-500"
+                      : "text-black"
+                  }`}
+                >
+                  Scanned URL Type: {message}
                 </p>
                 <button
                   className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md mt-4 hover:bg-gray-300"
