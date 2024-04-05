@@ -92,9 +92,7 @@ export default function Scan() {
                   className={`text-xl font-bold mb-2 ${
                     message.toLowerCase() === "benign"
                       ? "text-green-500"
-                      : message.toLowerCase() === "malicious"
-                      ? "text-red-500"
-                      : "text-black"
+                      : "text-red-500"
                   }`}
                 >
                   Scanned URL Type: {message}
