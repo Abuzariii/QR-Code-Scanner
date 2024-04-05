@@ -3,7 +3,6 @@ import { QrReader } from "react-qr-reader";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
-import axios from "axios";
 
 export default function Scan() {
   const router = useRouter();
@@ -12,6 +11,28 @@ export default function Scan() {
   const [showModal, setShowModal] = useState(false);
   const qrRef = useRef(null);
 
+  // Check url function
+  const checkUrl = async (url) => {
+    try {
+      const response = await fetch("/api/postData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      setMessage(data.label);
+    } catch (error) {
+      console.error("Failed to check URL:", error);
+      setMessage("Benign");
+    }
+  };
+
   const handleScan = async (result, error) => {
     if (!!result) {
       setData(result?.text);
@@ -19,25 +40,8 @@ export default function Scan() {
       // qrRef.current.stop();
 
       const scannedUrl = result?.text;
-      const url = `https://malicious-urls.p.rapidapi.com/check?url=${scannedUrl}`;
-      const options = {
-        method: "GET",
-        headers: {
-          "X-RapidAPI-Key":
-            "4642effa23msh96f41098f5e9d02p10d222jsn007841d345d5",
-          "X-RapidAPI-Host": "malicious-urls.p.rapidapi.com",
-        },
-      };
-
-      try {
-        const response = await fetch(url, options);
-        const result = await response.json();
-        console.log(result);
-        console.log(result.malicious);
-        setMessage(result.malicious === true ? "Malicious" : "Benign");
-      } catch (error) {
-        console.error(error);
-      }
+      console.log(scannedUrl);
+      checkUrl(scannedUrl);
     }
 
     if (!!error) {
@@ -60,7 +64,7 @@ export default function Scan() {
       </Head>
       <main className="flex flex-col mt-[5rem] justify-center items-center">
         <div className="flex flex-col justify-center items-center">
-          <h1 className="text-4xl font-bold mb-4">QR Scanner</h1>
+          <h1 className="text-4xl font-bold mb-4">Malicious QR Scanner</h1>
           <div>
             <QrReader
               className="lg:h-[400px] lg:w-[400px] h-[300px] w-[300px]"
@@ -72,16 +76,14 @@ export default function Scan() {
           </div>
           <Link
             href={`/`}
-            className=" bg-yellow-200 m-4 text-md rounded-md px-4 py-2 hover:underline"
+            className="bg-yellow-200 m-4 text-md rounded-md px-4 py-2 hover:underline"
           >
             Back to home..
           </Link>
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
               <div className="bg-white rounded-md p-4">
-                <p className="text-xl font-bold mb-2">
-                  Scanned data by Hanadi :
-                </p>
+                <p className="text-xl font-bold mb-2">Scanned data :</p>
                 <p>{data}</p>
                 <p className="text-xl font-bold mb-2">
                   Scanned URL Type : {message}
