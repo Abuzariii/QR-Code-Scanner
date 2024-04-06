@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 
-const uri = "";
+const uri =
+  "mongodb+srv://abuzariii:abuzar%40mongodb1234@users-cluster.mcqhi1q.mongodb.net/";
 const options = {};
 
 let client;
