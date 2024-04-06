@@ -85,9 +85,6 @@ export default function Scan() {
               <div className="bg-white rounded-md p-4">
                 <p className="text-xl font-bold mb-2">Scanned data :</p>
                 <p>{data}</p>
-                {/* <p className="text-xl font-bold mb-2">
-                  Scanned URL Type : {message}
-                </p> */}
                 <p
                   className={`text-xl font-bold mb-2 ${
                     message.toLowerCase() === "benign"
